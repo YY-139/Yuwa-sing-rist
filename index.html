@@ -10,6 +10,7 @@
    <script>
     const GAS_API_URL = 'https://script.google.com/macros/s/AKfycbxhuogV_zttjvWFerfiyLTSN0IOryHBo3vLPv-4pXrp9RBiFspcy6IoTDABra_-RdCZAg/exec';
    </script>
+  
   <style>
     :root {
       --yellow: #ffe66d;
@@ -122,6 +123,120 @@
   <footer>
     © 佳原ゆわの歌リクエスト
   </footer>
+
+  
+　<script>
+  (function () {
+    const searchInput = document.getElementById('song-search');
+    const genreFilter = document.getElementById('genre-filter');
+    const songCount = document.getElementById('song-count');
+    const songResults = document.getElementById('song-results');
+
+    let songs = [];
+
+    function loadSongs() {
+      const callbackName =
+        'yuwasongCallback_' + Date.now();
+
+      const script = document.createElement('script');
+      const separator = GAS_API_URL.includes('?') ? '&' : '?';
+
+      window[callbackName] = function (data) {
+        delete window[callbackName];
+        script.remove();
+
+        if (!data || !data.success || !Array.isArray(data.songs)) {
+          songCount.textContent = '曲データを読み込めなかったよ。';
+          return;
+        }
+
+        songs = data.songs;
+        renderSongs();
+      };
+
+      script.onerror = function () {
+        delete window[callbackName];
+        script.remove();
+        songCount.textContent =
+          '曲データの読み込みに失敗したよ。時間をおいて再度確認してね。';
+      };
+
+      script.src = GAS_API_URL
+        + separator
+        + 'callback='
+        + encodeURIComponent(callbackName);
+
+      document.head.appendChild(script);
+    }
+
+    function renderSongs() {
+      const keyword = searchInput.value.trim().toLowerCase();
+      const selectedGenre = genreFilter.value;
+
+      const filteredSongs = songs.filter(function (song) {
+        const title = String(song.title || '');
+        const artist = String(song.artist || '');
+
+        const matchesKeyword =
+          title.toLowerCase().includes(keyword)
+          || artist.toLowerCase().includes(keyword);
+
+        const genres = String(song.genre || '')
+          .split(',')
+          .map(function (genre) {
+            return genre.trim();
+          });
+
+        const matchesGenre =
+          !selectedGenre || genres.includes(selectedGenre);
+
+        return matchesKeyword && matchesGenre;
+      });
+
+      songCount.textContent =
+        '全 ' + filteredSongs.length + ' 曲';
+
+      songResults.replaceChildren();
+
+      if (filteredSongs.length === 0) {
+        const emptyMessage = document.createElement('p');
+        emptyMessage.textContent =
+          '該当する曲が見つからなかったよ。';
+        songResults.appendChild(emptyMessage);
+        return;
+      }
+
+      filteredSongs.forEach(function (song) {
+        const card = document.createElement('article');
+        const title = document.createElement('h3');
+        const artist = document.createElement('p');
+        const genre = document.createElement('p');
+
+        title.textContent = song.title || '曲名未登録';
+        artist.textContent = song.artist || 'アーティスト未登録';
+        genre.textContent = String(song.genre || '')
+          .split(',')
+          .map(function (item) {
+            return item.trim();
+          })
+          .filter(Boolean)
+          .join(' / ');
+
+        card.append(title, artist, genre);
+        card.style.padding = '12px 0';
+        card.style.borderBottom = '1px solid #eee4c8';
+
+        songResults.appendChild(card);
+      });
+    }
+
+    searchInput.addEventListener('input', renderSongs);
+    genreFilter.addEventListener('change', renderSongs);
+
+    loadSongs();
+  })();
+　</script>
+
 </body>
 </html>
 
