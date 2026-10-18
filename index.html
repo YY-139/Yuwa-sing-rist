@@ -467,6 +467,7 @@
           .trim();
       }
 
+      
       function filterSongs() {
         const keyword = normalizeForSearch(searchInput.value);
         const selectedGenre = normalizeForSearch(genreFilter.value);
@@ -475,12 +476,14 @@
           const title = normalizeForSearch(song.title);
           const artist = normalizeForSearch(song.artist);
           const genreText = normalizeForSearch(song.genre);
+          const searchWords = normalizeForSearch(song.searchWords);
 
           const matchesKeyword =
             !keyword
             || title.includes(keyword)
             || artist.includes(keyword)
-            || genreText.includes(keyword);
+            || genreText.includes(keyword)
+            || searchWords.includes(keyword);
 
           const genres = String(song.genre || '')
             .split(',')
