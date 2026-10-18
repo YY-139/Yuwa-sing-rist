@@ -37,21 +37,31 @@
       line-height: 1.7;
     }
 
-    header {
-      padding: 36px 20px;
-      text-align: center;
-      background: var(--yellow);
-      border-radius: 0 0 32px 32px;
-    }
+    
+　　header {
+  　　position: relative;
+  　　overflow: hidden;
+  　　padding: 42px 20px 38px;
+  　　text-align: center;
+  　　background: linear-gradient(135deg, #ffe66d 0%, #fff0a8 100%);
+ 　　 border-radius: 0 0 36px 36px;
+  　　box-shadow: 0 5px 18px #b58b0018;
+　　}
 
-    header h1 {
-      margin: 0;
-      font-size: clamp(24px, 5vw, 36px);
-    }
+　　header h1 {
+  　　margin: 0;
+ 　　 font-size: clamp(25px, 5vw, 36px);
+  　　font-weight: 700;
+ 　　 letter-spacing: 0.04em;
+ 　　 text-shadow: 0 2px 0 #ffffff80;
+　　}
 
-    header p {
-      margin: 8px 0 0;
-    }
+　　header p {
+ 　　 margin: 10px 0 0;
+ 　　 font-size: 14px;
+　　  font-weight: 500;
+　　}
+
 
     main {
       width: min(100% - 32px, 720px);
