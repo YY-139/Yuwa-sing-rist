@@ -7,14 +7,13 @@
   <meta name="theme-color" content="#fff9df">
   <title>佳原ゆわの歌リクエスト</title>
 
-   <script>
+  <script>
     const GAS_API_URL = 'https://script.google.com/macros/s/AKfycbxhuogV_zttjvWFerfiyLTSN0IOryHBo3vLPv-4pXrp9RBiFspcy6IoTDABra_-RdCZAg/exec';
-   </script>
+  </script>
 
-  
-　<link rel="preconnect" href="https://fonts.googleapis.com">
-　<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-　<link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;500;600;700&display=swap" rel="stylesheet">
 
   <style>
     :root {
@@ -29,6 +28,10 @@
       box-sizing: border-box;
     }
 
+    html {
+      scroll-behavior: smooth;
+    }
+
     body {
       margin: 0;
       font-family: "Zen Maru Gothic", sans-serif;
@@ -37,34 +40,37 @@
       line-height: 1.7;
     }
 
-    
-　　header {
-  　　position: relative;
-  　　overflow: hidden;
-  　　padding: 42px 20px 38px;
-  　　text-align: center;
-  　　background: linear-gradient(135deg, #ffe66d 0%, #fff0a8 100%);
- 　　 border-radius: 0 0 36px 36px;
-  　　box-shadow: 0 5px 18px #b58b0018;
-　　}
+    /* ヘッダー */
+    header {
+      width: 100%;
+      padding: 38px 20px 34px;
+      text-align: center;
+      background: linear-gradient(135deg, #ffe66d 0%, #fff0a8 100%);
+      border-radius: 0 0 32px 32px;
+      box-shadow: 0 5px 18px #b58b0018;
+    }
 
-　　header h1 {
-  　　margin: 0;
- 　　 font-size: clamp(25px, 5vw, 36px);
-  　　font-weight: 700;
- 　　 letter-spacing: 0.04em;
- 　　 text-shadow: 0 2px 0 #ffffff80;
-    　display: block;
-  　　text-align: center;
-　　}
+    header h1 {
+      display: block;
+      width: 100%;
+      margin: 0 auto;
+      text-align: center;
+      font-size: clamp(23px, 5vw, 34px);
+      font-weight: 700;
+      line-height: 1.5;
+      letter-spacing: 0.02em;
+      overflow-wrap: anywhere;
+    }
 
-　　header p {
- 　　 margin: 10px 0 0;
- 　　 font-size: 14px;
-　　  font-weight: 500;
-　　}
+    header p {
+      margin: 10px auto 0;
+      max-width: 520px;
+      text-align: center;
+      font-size: 14px;
+      font-weight: 500;
+    }
 
-
+    /* メイン */
     main {
       width: min(100% - 32px, 720px);
       margin: 28px auto;
@@ -74,229 +80,392 @@
       margin-bottom: 24px;
       padding: 22px;
       background: var(--white);
-      border-radius: 20px;
-      box-shadow: 0 4px 14px #5546370d;
+      border: 1px solid #f4edda;
+      border-radius: 24px;
+      box-shadow: 0 5px 18px #5546370b;
     }
 
     h2 {
-      margin-top: 0;
+      margin: 0 0 10px;
       font-size: 21px;
+      font-weight: 700;
     }
 
-    footer {
-      padding: 24px;
-      text-align: center;
+    h3 {
+      font-weight: 700;
+    }
+
+    p {
+      overflow-wrap: anywhere;
+    }
+
+    /* 画面切り替えボタン */
+    .page-tabs {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      margin-bottom: 22px;
+    }
+
+    .tab-button {
+      min-height: 58px;
+      padding: 10px;
+      border: 2px solid #f0dfaa;
+      border-radius: 16px;
+      background: #ffffff;
+      color: var(--brown);
+      font: inherit;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.15s, background 0.15s;
+    }
+
+    .tab-button:hover {
+      background: #fff4c6;
+      transform: translateY(-2px);
+    }
+
+    .tab-button[aria-pressed="true"] {
+      background: var(--yellow);
+      border-color: #f0ce45;
+    }
+
+    .tab-button span {
+      display: block;
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    /* 検索フォーム */
+    #song-list label {
+      display: block;
+      margin: 16px 0 6px;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    #song-search,
+    #genre-filter {
+      display: block;
+      width: 100%;
+      min-height: 46px;
+      padding: 10px 12px;
+      border: 1px solid #eadfca;
+      border-radius: 12px;
+      background: #fffdf6;
+      color: var(--brown);
+      font: inherit;
+    }
+
+    #song-search:focus,
+    #genre-filter:focus {
+      outline: 2px solid #f0ce45;
+      outline-offset: 2px;
+    }
+
+    #search-button {
+      display: block;
+      width: 100%;
+      min-height: 48px;
+      margin-top: 18px;
+      padding: 12px;
+      border: none;
+      border-radius: 14px;
+      background: var(--yellow);
+      color: var(--brown);
+      font: inherit;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 3px 0 #e8c943;
+      transition: transform 0.15s, box-shadow 0.15s;
+    }
+
+    #search-button:hover {
+      filter: brightness(0.98);
+    }
+
+    #search-button:active {
+      transform: translateY(2px);
+      box-shadow: 0 1px 0 #e8c943;
+    }
+
+    #song-count {
+      margin-top: 20px;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    #song-results article {
+      padding: 14px 12px;
+      margin-bottom: 10px;
+      border: 1px solid #f1e8d1;
+      border-radius: 14px;
+      background: #fffdf8;
+    }
+
+    #song-results article:last-child {
+      margin-bottom: 0;
+    }
+
+    #song-results article h3 {
+      margin: 0;
+      font-size: 17px;
+    }
+
+    #song-results article p {
+      margin: 4px 0 0;
+      font-size: 14px;
+    }
+
+    .song-artist {
+      color: #786a58;
+    }
+
+    .song-genre {
+      color: #a17d16;
+      font-size: 12px !important;
+    }
+
+    .helper-text {
+      color: #786a58;
       font-size: 13px;
     }
 
-    
-/* 検索フォーム */
-#song-list label {
-  display: block;
-  margin: 16px 0 6px;
-  font-size: 14px;
-  font-weight: bold;
-}
+    /* 画面の表示切り替え */
+    [hidden] {
+      display: none !important;
+    }
 
-#song-search,
-#genre-filter {
-  display: block;
-  width: 100%;
-  min-height: 46px;
-  padding: 10px 12px;
-  border: 1px solid #eadfca;
-  border-radius: 12px;
-  background: #fffdf6;
-  color: var(--brown);
-  font: inherit;
-}
+    /* リクエスト欄 */
+    #song-request {
+      border-radius: 24px;
+      background: #ffffff;
+    }
 
-#song-search:focus,
-#genre-filter:focus {
-  outline: 2px solid #f0ce45;
-  outline-offset: 2px;
-}
+    .request-decoration {
+      color: #b58b00;
+      text-align: center;
+      font-size: 14px;
+    }
 
-#search-button {
-  display: block;
-  width: 100%;
-  min-height: 48px;
-  margin-top: 18px;
-  padding: 12px;
-  border: none;
-  border-radius: 12px;
-  background: var(--yellow);
-  color: var(--brown);
-  font: inherit;
-  font-weight: bold;
-  cursor: pointer;
-}
+    /* フッター */
+    footer {
+      padding: 24px 16px;
+      text-align: center;
+      font-size: 13px;
+      color: #786a58;
+    }
 
-#search-button:hover {
-  filter: brightness(0.97);
-}
+    @media (max-width: 480px) {
+      header {
+        padding: 30px 14px 28px;
+      }
 
-#search-button:active {
-  transform: scale(0.99);
-}
+      header h1 {
+        font-size: 23px;
+      }
 
-#song-count {
-  margin-top: 20px;
-  font-size: 14px;
-  font-weight: bold;
-}
+      main {
+        width: min(100% - 24px, 720px);
+        margin-top: 20px;
+      }
 
-#song-results article h3 {
-  margin: 0;
-  font-size: 17px;
-}
+      section {
+        padding: 18px;
+        border-radius: 20px;
+      }
 
-#song-results article p {
-  margin: 4px 0;
-  font-size: 14px;
-}
-
+      h2 {
+        font-size: 19px;
+      }
+    }
   </style>
 </head>
 
 <body>
   <header>
     <h1>🎤 佳原ゆわの歌リクエスト 🎶</h1>
-    <p>歌える曲を検索！一覧にない曲もリクエストしてね♪</p>
+    <p>歌いたい曲、見つけてね ♪</p>
   </header>
 
   <main>
+    <nav class="page-tabs" aria-label="曲の探し方">
+      <button
+        class="tab-button"
+        id="search-tab"
+        type="button"
+        aria-pressed="true"
+      >
+        🔍 検索から調べる
+        <span>曲名・ジャンルで探す</span>
+      </button>
 
-　<section id="song-list">
-  <h2>🎵 歌える曲を探す</h2>
-  <p>曲名やアーティスト名から検索できるよ！</p>
+      <button
+        class="tab-button"
+        id="list-tab"
+        type="button"
+        aria-pressed="false"
+      >
+        🎵 一覧から調べる
+        <span>歌える曲を眺める</span>
+      </button>
+    </nav>
 
-  
-<label for="song-search">曲名・アーティスト名</label>
-<input
-  id="song-search"
-  type="search"
-  placeholder="曲名やアーティスト名を入力"
->
+    <section id="search-page">
+      <h2>🔍 曲を検索する</h2>
+      <p>曲名やアーティスト名から探してね！</p>
 
-<label for="genre-filter">ジャンル</label>
+      <label for="song-search">曲名・アーティスト名</label>
+      <input
+        id="song-search"
+        type="search"
+        maxlength="100"
+        placeholder="曲名やアーティスト名を入力"
+      >
 
-  <select id="genre-filter">
-    <option value="">すべてのジャンル</option>
-    <option value="J-POP">J-POP</option>
-    <option value="アニソン">アニソン</option>
-    <option value="ボカロ">ボカロ</option>
-    <option value="アイドル">アイドル</option>
-    <option value="ロック">ロック</option>
-    <option value="バラード">バラード</option>
-    <option value="洋楽">洋楽</option>
-    <option value="その他">その他</option>
-  </select>
+      <label for="genre-filter">ジャンル</label>
+      <select id="genre-filter">
+        <option value="">すべてのジャンル</option>
+        <option value="J-POP">J-POP</option>
+        <option value="アニソン">アニソン</option>
+        <option value="ボカロ">ボカロ</option>
+        <option value="アイドル">アイドル</option>
+        <option value="ロック">ロック</option>
+        <option value="バラード">バラード</option>
+        <option value="洋楽">洋楽</option>
+        <option value="その他">その他</option>
+      </select>
 
-  
-　<button id="search-button" type="button">🔍 検索する</button>
+      <button id="search-button" type="button">🔍 この条件で検索</button>
 
-  <p id="song-count" aria-live="polite">曲データを準備中...</p>
-  <div id="song-results" aria-live="polite">
-    <p>曲一覧を読み込む準備中だよ♪</p>
-  </div>
-　</section>
+      <p id="song-count" aria-live="polite">曲データを読み込み中...</p>
+      <div id="song-results" aria-live="polite">
+        <p>曲一覧を読み込む準備中だよ♪</p>
+      </div>
+    </section>
 
+    <section id="list-page" hidden>
+      <h2>🎵 歌える曲一覧</h2>
+      <p>気になる曲を探してみてね！</p>
+      <p class="helper-text">曲名・アーティスト名・ジャンルを表示しているよ。</p>
+      <p id="list-count" aria-live="polite">曲データを読み込み中...</p>
+      <div id="list-results" aria-live="polite"></div>
+    </section>
 
     <section id="song-request">
       <h2>💌 曲のリクエスト</h2>
       <p>一覧にない曲も、ぜひ教えてね！</p>
-      <p>リクエストフォームはこれから追加するよ。</p>
+      <p class="helper-text">リクエストフォームはこのあと追加するよ♪</p>
+      <p class="request-decoration">♡ あなたのリクエスト待ってます ♡</p>
     </section>
   </main>
 
   <footer>
-    © 佳原ゆわの歌リクエスト
+    ♡ © 佳原ゆわの歌リクエスト ♡
   </footer>
 
-  
-　<script>
-  (function () {
-    const searchInput = document.getElementById('song-search');
-    const genreFilter = document.getElementById('genre-filter');
-    const songCount = document.getElementById('song-count');
-    const songResults = document.getElementById('song-results');
+  <script>
+    (function () {
+      const searchInput = document.getElementById('song-search');
+      const genreFilter = document.getElementById('genre-filter');
+      const searchButton = document.getElementById('search-button');
+      const songCount = document.getElementById('song-count');
+      const songResults = document.getElementById('song-results');
+      const listCount = document.getElementById('list-count');
+      const listResults = document.getElementById('list-results');
 
-    let songs = [];
+      const searchTab = document.getElementById('search-tab');
+      const listTab = document.getElementById('list-tab');
+      const searchPage = document.getElementById('search-page');
+      const listPage = document.getElementById('list-page');
 
-    function loadSongs() {
-      const callbackName =
-        'yuwasongCallback_' + Date.now();
+      let songs = [];
 
-      const script = document.createElement('script');
-      const separator = GAS_API_URL.includes('?') ? '&' : '?';
+      function switchPage(page) {
+        const showSearch = page === 'search';
 
-      window[callbackName] = function (data) {
-        delete window[callbackName];
-        script.remove();
+        searchPage.hidden = !showSearch;
+        listPage.hidden = showSearch;
 
-        if (!data || !data.success || !Array.isArray(data.songs)) {
-          songCount.textContent = '曲データを読み込めなかったよ。';
-          return;
+        searchTab.setAttribute('aria-pressed', String(showSearch));
+        listTab.setAttribute('aria-pressed', String(!showSearch));
+
+        if (!showSearch) {
+          renderList();
         }
-
-        songs = data.songs;
-        renderSongs();
-      };
-
-      script.onerror = function () {
-        delete window[callbackName];
-        script.remove();
-        songCount.textContent =
-          '曲データの読み込みに失敗したよ。時間をおいて再度確認してね。';
-      };
-
-      script.src = GAS_API_URL
-        + separator
-        + 'callback='
-        + encodeURIComponent(callbackName);
-
-      document.head.appendChild(script);
-    }
-
-    function renderSongs() {
-      const keyword = searchInput.value.trim().toLowerCase();
-      const selectedGenre = genreFilter.value;
-
-      const filteredSongs = songs.filter(function (song) {
-        const title = String(song.title || '');
-        const artist = String(song.artist || '');
-
-        const matchesKeyword =
-          title.toLowerCase().includes(keyword)
-          || artist.toLowerCase().includes(keyword);
-
-        const genres = String(song.genre || '')
-          .split(',')
-          .map(function (genre) {
-            return genre.trim();
-          });
-
-        const matchesGenre =
-          !selectedGenre || genres.includes(selectedGenre);
-
-        return matchesKeyword && matchesGenre;
-      });
-
-      songCount.textContent =
-        '全 ' + filteredSongs.length + ' 曲';
-
-      songResults.replaceChildren();
-
-      if (filteredSongs.length === 0) {
-        const emptyMessage = document.createElement('p');
-        emptyMessage.textContent =
-          '該当する曲が見つからなかったよ。';
-        songResults.appendChild(emptyMessage);
-        return;
       }
 
-      filteredSongs.forEach(function (song) {
+      function loadSongs() {
+        const callbackName = 'yuwasongCallback_' + Date.now();
+        const script = document.createElement('script');
+        const separator = GAS_API_URL.includes('?') ? '&' : '?';
+
+        window[callbackName] = function (data) {
+          delete window[callbackName];
+          script.remove();
+
+          if (!data || !data.success || !Array.isArray(data.songs)) {
+            showLoadError();
+            return;
+          }
+
+          songs = data.songs;
+          renderSearchResults();
+          renderList();
+        };
+
+        script.onerror = function () {
+          delete window[callbackName];
+          script.remove();
+          showLoadError();
+        };
+
+        script.src = GAS_API_URL
+          + separator
+          + 'callback='
+          + encodeURIComponent(callbackName);
+
+        document.head.appendChild(script);
+      }
+
+      function showLoadError() {
+        songCount.textContent = '曲データを読み込めなかったよ。';
+        songResults.replaceChildren();
+
+        const message = document.createElement('p');
+        message.textContent = '時間をおいて、もう一度確認してね。';
+        songResults.appendChild(message);
+
+        listCount.textContent = '曲データを読み込めなかったよ。';
+        listResults.replaceChildren();
+      }
+
+      function filterSongs() {
+        const keyword = searchInput.value.trim().toLowerCase();
+        const selectedGenre = genreFilter.value;
+
+        return songs.filter(function (song) {
+          const title = String(song.title || '');
+          const artist = String(song.artist || '');
+
+          const matchesKeyword =
+            title.toLowerCase().includes(keyword)
+            || artist.toLowerCase().includes(keyword);
+
+          const genres = String(song.genre || '')
+            .split(',')
+            .map(function (genre) {
+              return genre.trim();
+            });
+
+          const matchesGenre =
+            !selectedGenre || genres.includes(selectedGenre);
+
+          return matchesKeyword && matchesGenre;
+        });
+      }
+
+      function createSongCard(song) {
         const card = document.createElement('article');
         const title = document.createElement('h3');
         const artist = document.createElement('p');
@@ -304,29 +473,66 @@
 
         title.textContent = song.title || '曲名未登録';
         artist.textContent = song.artist || 'アーティスト未登録';
+        artist.className = 'song-artist';
+
         genre.textContent = String(song.genre || '')
           .split(',')
           .map(function (item) {
             return item.trim();
           })
           .filter(Boolean)
-          .join(' / ');
+          .join(' ♡ ');
+
+        genre.className = 'song-genre';
 
         card.append(title, artist, genre);
-        card.style.padding = '12px 0';
-        card.style.borderBottom = '1px solid #eee4c8';
+        return card;
+      }
 
-        songResults.appendChild(card);
+      function renderSearchResults() {
+        const filteredSongs = filterSongs();
+
+        songCount.textContent = '検索結果：' + filteredSongs.length + ' 曲';
+        songResults.replaceChildren();
+
+        if (filteredSongs.length === 0) {
+          const message = document.createElement('p');
+          message.textContent = '該当する曲が見つからなかったよ。';
+          songResults.appendChild(message);
+          return;
+        }
+
+        filteredSongs.forEach(function (song) {
+          songResults.appendChild(createSongCard(song));
+        });
+      }
+
+      function renderList() {
+        listCount.textContent = '全 ' + songs.length + ' 曲';
+        listResults.replaceChildren();
+
+        if (songs.length === 0) {
+          const message = document.createElement('p');
+          message.textContent = 'まだ曲が登録されていないよ。';
+          listResults.appendChild(message);
+          return;
+        }
+
+        songs.forEach(function (song) {
+          listResults.appendChild(createSongCard(song));
+        });
+      }
+
+      searchButton.addEventListener('click', renderSearchResults);
+      searchTab.addEventListener('click', function () {
+        switchPage('search');
       });
-    }
+      listTab.addEventListener('click', function () {
+        switchPage('list');
+      });
 
-    searchInput.addEventListener('input', renderSongs);
-    genreFilter.addEventListener('change', renderSongs);
-
-    loadSongs();
-  })();
-　</script>
-
+      loadSongs();
+    })();
+  </script>
 </body>
 </html>
-
