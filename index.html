@@ -440,22 +440,36 @@
         listResults.replaceChildren();
       }
 
+            // ひらがな・カタカナ、全角・半角、大文字・小文字の違いを吸収する
+      function normalizeForSearch(value) {
+        return String(value || '')
+          .normalize('NFKC')
+          .toLowerCase()
+          .replace(/[ァ-ヶ]/g, function (character) {
+            return String.fromCharCode(character.charCodeAt(0) - 0x60);
+          })
+          .trim();
+      }
+
       function filterSongs() {
-        const keyword = searchInput.value.trim().toLowerCase();
-        const selectedGenre = genreFilter.value;
+        const keyword = normalizeForSearch(searchInput.value);
+        const selectedGenre = normalizeForSearch(genreFilter.value);
 
         return songs.filter(function (song) {
-          const title = String(song.title || '');
-          const artist = String(song.artist || '');
+          const title = normalizeForSearch(song.title);
+          const artist = normalizeForSearch(song.artist);
+          const genreText = normalizeForSearch(song.genre);
 
           const matchesKeyword =
-            title.toLowerCase().includes(keyword)
-            || artist.toLowerCase().includes(keyword);
+            !keyword
+            || title.includes(keyword)
+            || artist.includes(keyword)
+            || genreText.includes(keyword);
 
           const genres = String(song.genre || '')
             .split(',')
             .map(function (genre) {
-              return genre.trim();
+              return normalizeForSearch(genre);
             });
 
           const matchesGenre =
