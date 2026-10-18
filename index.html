@@ -80,11 +80,37 @@
   </header>
 
   <main>
-    <section id="song-list">
-      <h2>🎵 歌える曲を探す</h2>
-      <p>曲名やアーティスト名から、歌える曲を検索できるよ！</p>
-      <p>※ 曲一覧はこれから追加するね。</p>
-    </section>
+
+　<section id="song-list">
+  <h2>🎵 歌える曲を探す</h2>
+  <p>曲名やアーティスト名から検索できるよ！</p>
+
+  <label for="song-search">曲名・アーティスト名</label>
+  <input
+    id="song-search"
+    type="search"
+    placeholder="曲名やアーティスト名を入力"
+  >
+
+  <label for="genre-filter">ジャンル</label>
+  <select id="genre-filter">
+    <option value="">すべてのジャンル</option>
+    <option value="J-POP">J-POP</option>
+    <option value="アニソン">アニソン</option>
+    <option value="ボカロ">ボカロ</option>
+    <option value="アイドル">アイドル</option>
+    <option value="ロック">ロック</option>
+    <option value="バラード">バラード</option>
+    <option value="洋楽">洋楽</option>
+    <option value="その他">その他</option>
+  </select>
+
+  <p id="song-count" aria-live="polite">曲データを準備中...</p>
+  <div id="song-results" aria-live="polite">
+    <p>曲一覧を読み込む準備中だよ♪</p>
+  </div>
+　</section>
+
 
     <section id="song-request">
       <h2>💌 曲のリクエスト</h2>
