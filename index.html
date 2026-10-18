@@ -476,14 +476,18 @@
           const title = normalizeForSearch(song.title);
           const artist = normalizeForSearch(song.artist);
           const genreText = normalizeForSearch(song.genre);
-          const searchWords = normalizeForSearch(song.searchWords);
+          const searchWords = normalizeForSearch(song.searchWords)
+                .split(/[、,，\s]+/)
+                .filter(Boolean);
 
           const matchesKeyword =
             !keyword
             || title.includes(keyword)
             || artist.includes(keyword)
             || genreText.includes(keyword)
-            || searchWords.includes(keyword);
+            || searchWords.some(function (word) {
+               return word.includes(keyword);
+               });
 
           const genres = String(song.genre || '')
             .split(',')
