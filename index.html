@@ -71,6 +71,74 @@
       text-align: center;
       font-size: 13px;
     }
+
+    
+/* 検索フォーム */
+#song-list label {
+  display: block;
+  margin: 16px 0 6px;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+#song-search,
+#genre-filter {
+  display: block;
+  width: 100%;
+  min-height: 46px;
+  padding: 10px 12px;
+  border: 1px solid #eadfca;
+  border-radius: 12px;
+  background: #fffdf6;
+  color: var(--brown);
+  font: inherit;
+}
+
+#song-search:focus,
+#genre-filter:focus {
+  outline: 2px solid #f0ce45;
+  outline-offset: 2px;
+}
+
+#search-button {
+  display: block;
+  width: 100%;
+  min-height: 48px;
+  margin-top: 18px;
+  padding: 12px;
+  border: none;
+  border-radius: 12px;
+  background: var(--yellow);
+  color: var(--brown);
+  font: inherit;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+#search-button:hover {
+  filter: brightness(0.97);
+}
+
+#search-button:active {
+  transform: scale(0.99);
+}
+
+#song-count {
+  margin-top: 20px;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+#song-results article h3 {
+  margin: 0;
+  font-size: 17px;
+}
+
+#song-results article p {
+  margin: 4px 0;
+  font-size: 14px;
+}
+
   </style>
 </head>
 
