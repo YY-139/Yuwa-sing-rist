@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -195,26 +194,43 @@
       font-weight: 700;
     }
 
-    #song-results article {
-      padding: 14px 12px;
-      margin-bottom: 10px;
-      border: 1px solid #f1e8d1;
-      border-radius: 14px;
-      background: #fffdf8;
+  
+    /* 曲カード：1曲ずつ見分けやすくする */
+    #song-results article,
+    #list-results article {
+      padding: 16px;
+      margin-bottom: 14px;
+      border: 1px solid #eadbb8;
+      border-radius: 18px;
+      background: #ffffff;
+      box-shadow: 0 3px 10px #5546370a;
+      transition: border-color 0.2s, box-shadow 0.2s;
     }
 
-    #song-results article:last-child {
+    #song-results article:last-child,
+    #list-results article:last-child {
       margin-bottom: 0;
     }
 
-    #song-results article h3 {
-      margin: 0;
-      font-size: 17px;
+    #song-results article:hover,
+    #list-results article:hover {
+      border-color: #e8ce70;
+      box-shadow: 0 4px 14px #b58b0014;
     }
 
-    #song-results article p {
-      margin: 4px 0 0;
+    #song-results article h3,
+    #list-results article h3 {
+      margin: 0;
+      font-size: 17px;
+      line-height: 1.6;
+      overflow-wrap: anywhere;
+    }
+
+    #song-results article p,
+    #list-results article p {
+      margin: 5px 0 0;
       font-size: 14px;
+      overflow-wrap: anywhere;
     }
 
     .song-artist {
