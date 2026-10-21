@@ -775,6 +775,7 @@
       const requestStatus = document.getElementById('request-status');
       const requestSubmit = document.getElementById('request-submit');
 
+      
       requestForm.addEventListener('submit', function (event) {
         event.preventDefault();
 
@@ -804,13 +805,41 @@
           sendForm.appendChild(input);
         }
 
+        const responseFrame = document.getElementById('request-response-frame');
+
+        responseFrame.onload = function () {
+          try {
+            const frameDocument =
+              responseFrame.contentDocument ||
+              responseFrame.contentWindow.document;
+
+            const responseText =
+              frameDocument.body
+                ? frameDocument.body.innerText
+                : '';
+
+            if (responseText.includes('リクエストを受け付けました！')) {
+              requestForm.reset();
+              requestStatus.textContent =
+                'リクエストありがとう！受付できたよ♪';
+            } else if (responseText.includes('送信できませんでした')) {
+              requestStatus.textContent =
+                '送信できなかったみたい…。入力内容を確認してね。';
+            } else {
+              requestStatus.textContent =
+                '受付結果を確認できなかったよ。スプレッドシートを確認してね。';
+            }
+          } catch (error) {
+            requestStatus.textContent =
+              '受付結果を確認できなかったよ。スプレッドシートを確認してね。';
+          } finally {
+            requestSubmit.disabled = false;
+          }
+        };
+
         document.body.appendChild(sendForm);
         sendForm.submit();
         sendForm.remove();
-
-        requestStatus.textContent =
-          '送信を試みたよ！受付結果は送信先の画面で確認してね。';
-        requestSubmit.disabled = false;
       });
 
       loadSongs();
