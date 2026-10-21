@@ -775,6 +775,26 @@
       const requestStatus = document.getElementById('request-status');
       const requestSubmit = document.getElementById('request-submit');
 
+            window.addEventListener('message', function (event) {
+        if (event.origin !== 'https://script.google.com') {
+          return;
+        }
+
+        if (!event.data || event.data.type !== 'yuwasong-result') {
+          return;
+        }
+
+        if (event.data.success) {
+          requestForm.reset();
+          requestStatus.textContent =
+            'リクエストありがとう！受付できたよ♪';
+        } else {
+          requestStatus.textContent =
+            '送信できなかったみたい…。入力内容を確認してね。';
+        }
+
+        requestSubmit.disabled = false;
+       });
       
       requestForm.addEventListener('submit', function (event) {
         event.preventDefault();
