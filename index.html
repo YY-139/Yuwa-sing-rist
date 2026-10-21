@@ -368,12 +368,74 @@
       <div id="list-results" aria-live="polite"></div>
     </section>
 
-    <section id="song-request">
-      <h2>💌 曲のリクエスト</h2>
-      <p>一覧にない曲も、ぜひ教えてね！</p>
-      <p class="helper-text">リクエストフォームはこのあと追加するよ♪</p>
-      <p class="request-decoration">♡ あなたのリクエスト待ってます ♡</p>
-    </section>
+    
+  <section id="song-request">
+  <h2>💌 曲のリクエスト</h2>
+  <p>一覧にない曲も、ぜひ教えてね！</p>
+
+  <form id="request-form">
+    <div class="form-group">
+      <label for="request-title">曲名 <span>必須</span></label>
+      <input
+        type="text"
+        id="request-title"
+        name="requestedTitle"
+        maxlength="100"
+        placeholder="リクエストしたい曲名"
+        required
+      >
+    </div>
+
+    <div class="form-group">
+      <label for="request-artist">アーティスト名</label>
+      <input
+        type="text"
+        id="request-artist"
+        name="requestedArtist"
+        maxlength="100"
+        placeholder="アーティスト名（任意）"
+      >
+    </div>
+
+    <div class="form-group">
+      <label for="request-listener">お名前・ニックネーム</label>
+      <input
+        type="text"
+        id="request-listener"
+        name="listenerName"
+        maxlength="50"
+        placeholder="お名前（任意）"
+      >
+    </div>
+
+    <div class="form-group">
+      <label for="request-message">ひとこと</label>
+      <textarea
+        id="request-message"
+        name="message"
+        maxlength="300"
+        rows="3"
+        placeholder="曲への思いなど、自由に書いてね♪"
+      ></textarea>
+    </div>
+
+    <button type="submit" id="request-submit">
+      リクエストを送る ♡
+    </button>
+
+    <p id="request-status" role="status" aria-live="polite"></p>
+  </form>
+
+  <iframe
+    name="request-response-frame"
+    id="request-response-frame"
+    title="リクエスト送信結果"
+    hidden
+  ></iframe>
+
+  <p class="request-decoration">♡ あなたのリクエスト待ってます ♡</p>
+  </section>
+
   </main>
 
   <footer>
