@@ -622,6 +622,7 @@
         });
       }
 
+      
       searchButton.addEventListener('click', renderSearchResults);
       searchTab.addEventListener('click', function () {
         switchPage('search');
@@ -630,7 +631,50 @@
         switchPage('list');
       });
 
+      const requestForm = document.getElementById('request-form');
+      const requestStatus = document.getElementById('request-status');
+      const requestSubmit = document.getElementById('request-submit');
+
+      requestForm.addEventListener('submit', function (event) {
+        event.preventDefault();
+
+        const title = document.getElementById('request-title').value.trim();
+
+        if (!title) {
+          requestStatus.textContent = '曲名を入力してね！';
+          return;
+        }
+
+        requestSubmit.disabled = true;
+        requestStatus.textContent = '送信中だよ…';
+
+        const formData = new FormData(requestForm);
+        const sendForm = document.createElement('form');
+
+        sendForm.method = 'POST';
+        sendForm.action = GAS_API_URL;
+        sendForm.target = 'request-response-frame';
+        sendForm.acceptCharset = 'UTF-8';
+
+        for (const [key, value] of formData.entries()) {
+          const input = document.createElement('input');
+          input.type = 'hidden';
+          input.name = key;
+          input.value = value;
+          sendForm.appendChild(input);
+        }
+
+        document.body.appendChild(sendForm);
+        sendForm.submit();
+        sendForm.remove();
+
+        requestStatus.textContent =
+          '送信を試みたよ！受付結果は送信先の画面で確認してね。';
+        requestSubmit.disabled = false;
+      });
+
       loadSongs();
+
     })();
   </script>
 </body>
