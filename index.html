@@ -778,8 +778,11 @@
       const responseFrame = document.getElementById('request-response-frame');
 
       let requestInProgress = false;
+      let sendFormInProgress = null;
+      let requestTimeoutId = null;
 
       window.addEventListener('message', function (event) {
+        // 送信結果は、リクエスト用iframeからの通知だけを受け取る
         if (event.source !== responseFrame.contentWindow) {
           return;
         }
@@ -795,6 +798,16 @@
         requestInProgress = false;
         requestSubmit.disabled = false;
 
+        if (requestTimeoutId !== null) {
+          clearTimeout(requestTimeoutId);
+          requestTimeoutId = null;
+        }
+
+        if (sendFormInProgress) {
+          sendFormInProgress.remove();
+          sendFormInProgress = null;
+        }
+
         if (event.data.success === true) {
           requestForm.reset();
           requestStatus.textContent =
@@ -808,6 +821,7 @@
       requestForm.addEventListener('submit', function (event) {
         event.preventDefault();
 
+        // 送信処理中の連続クリック・連続送信を防ぐ
         if (requestInProgress) {
           return;
         }
@@ -830,6 +844,7 @@
         sendForm.action = GAS_API_URL;
         sendForm.target = 'request-response-frame';
         sendForm.acceptCharset = 'UTF-8';
+        sendForm.style.display = 'none';
 
         for (const [key, value] of formData.entries()) {
           const input = document.createElement('input');
@@ -839,9 +854,42 @@
           sendForm.appendChild(input);
         }
 
+        // 重要：送信直後にはフォームを削除しない。
+        // 結果通知を受け取ったあとに削除する。
         document.body.appendChild(sendForm);
-        sendForm.submit();
-        sendForm.remove();
+        sendFormInProgress = sendForm;
+
+        try {
+          sendForm.submit();
+        } catch (error) {
+          requestInProgress = false;
+          requestSubmit.disabled = false;
+          sendForm.remove();
+          sendFormInProgress = null;
+          requestStatus.textContent =
+            '送信を開始できなかったよ。時間をおいて確認してね。';
+          return;
+        }
+
+        // 通知が返ってこない場合に画面が永久に「送信中」にならないようにする。
+        // タイムアウト時は登録済みの可能性があるため、シートを確認するまで再送しない。
+        requestTimeoutId = setTimeout(function () {
+          if (!requestInProgress) {
+            return;
+          }
+
+          requestInProgress = false;
+          requestSubmit.disabled = true;
+          requestStatus.textContent =
+            '送信結果を確認できなかったよ。重複を防ぐため、REQUESTSシートに追加されていないか確認してから、再送してね。';
+
+          if (sendFormInProgress) {
+            sendFormInProgress.remove();
+            sendFormInProgress = null;
+          }
+
+          requestTimeoutId = null;
+        }, 20000);
       });
 
 
