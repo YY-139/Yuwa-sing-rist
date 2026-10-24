@@ -771,12 +771,16 @@
         switchPage('list');
       });
 
+      
       const requestForm = document.getElementById('request-form');
       const requestStatus = document.getElementById('request-status');
       const requestSubmit = document.getElementById('request-submit');
+      const responseFrame = document.getElementById('request-response-frame');
 
-            window.addEventListener('message', function (event) {
-        if (event.origin !== 'https://script.google.com') {
+      let requestInProgress = false;
+
+      window.addEventListener('message', function (event) {
+        if (event.source !== responseFrame.contentWindow) {
           return;
         }
 
@@ -784,7 +788,14 @@
           return;
         }
 
-        if (event.data.success) {
+        if (!requestInProgress) {
+          return;
+        }
+
+        requestInProgress = false;
+        requestSubmit.disabled = false;
+
+        if (event.data.success === true) {
           requestForm.reset();
           requestStatus.textContent =
             'リクエストありがとう！受付できたよ♪';
@@ -792,12 +803,14 @@
           requestStatus.textContent =
             '送信できなかったみたい…。入力内容を確認してね。';
         }
+      });
 
-        requestSubmit.disabled = false;
-       });
-      
       requestForm.addEventListener('submit', function (event) {
         event.preventDefault();
+
+        if (requestInProgress) {
+          return;
+        }
 
         const title = document.getElementById('request-title').value.trim();
 
@@ -806,6 +819,7 @@
           return;
         }
 
+        requestInProgress = true;
         requestSubmit.disabled = true;
         requestStatus.textContent = '送信中だよ…';
 
@@ -825,42 +839,11 @@
           sendForm.appendChild(input);
         }
 
-        const responseFrame = document.getElementById('request-response-frame');
-
-        responseFrame.onload = function () {
-          try {
-            const frameDocument =
-              responseFrame.contentDocument ||
-              responseFrame.contentWindow.document;
-
-            const responseText =
-              frameDocument.body
-                ? frameDocument.body.innerText
-                : '';
-
-            if (responseText.includes('リクエストを受け付けました！')) {
-              requestForm.reset();
-              requestStatus.textContent =
-                'リクエストありがとう！受付できたよ♪';
-            } else if (responseText.includes('送信できませんでした')) {
-              requestStatus.textContent =
-                '送信できなかったみたい…。入力内容を確認してね。';
-            } else {
-              requestStatus.textContent =
-                '受付結果を確認できなかったよ。スプレッドシートを確認してね。';
-            }
-          } catch (error) {
-            requestStatus.textContent =
-              '受付結果を確認できなかったよ。スプレッドシートを確認してね。';
-          } finally {
-            requestSubmit.disabled = false;
-          }
-        };
-
         document.body.appendChild(sendForm);
         sendForm.submit();
         sendForm.remove();
       });
+
 
       loadSongs();
 
