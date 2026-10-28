@@ -778,20 +778,25 @@
       const responseFrame = document.getElementById('request-response-frame');
 
       let requestInProgress = false;
-      let sendFormInProgress = null;
+      let activeRequestToken = '';
       let requestTimeoutId = null;
+      let sendFormInProgress = null;
 
+      // GASから届いた結果は、今回の送信に付けた照合番号が一致した場合だけ反映する。
+      // iframeの遷移先によってorigin/sourceの見え方が変わる場合があるため、
+      // originやsourceだけでは判定せず、照合番号で今回の送信と結び付ける。
       window.addEventListener('message', function (event) {
-        // 送信結果は、リクエスト用iframeからの通知だけを受け取る
-        if (event.source !== responseFrame.contentWindow) {
+        const data = event.data;
+
+        if (!data || data.type !== 'yuwasong-result') {
           return;
         }
 
-        if (!event.data || event.data.type !== 'yuwasong-result') {
+        if (!requestInProgress || !activeRequestToken) {
           return;
         }
 
-        if (!requestInProgress) {
+        if (data.requestToken !== activeRequestToken) {
           return;
         }
 
@@ -808,26 +813,25 @@
           sendFormInProgress = null;
         }
 
-        if (event.data.success === true) {
+        if (data.success === true) {
           requestForm.reset();
-          requestStatus.textContent =
-            'リクエストありがとう！受付できたよ♪';
+          requestStatus.textContent = 'リクエストありがとう！受付できたよ♪';
         } else {
-          requestStatus.textContent =
+          requestStatus.textContent = data.message ||
             '送信できなかったみたい…。入力内容を確認してね。';
         }
+
+        activeRequestToken = '';
       });
 
       requestForm.addEventListener('submit', function (event) {
         event.preventDefault();
 
-        // 送信処理中の連続クリック・連続送信を防ぐ
         if (requestInProgress) {
           return;
         }
 
         const title = document.getElementById('request-title').value.trim();
-
         if (!title) {
           requestStatus.textContent = '曲名を入力してね！';
           return;
@@ -837,9 +841,13 @@
         requestSubmit.disabled = true;
         requestStatus.textContent = '送信中だよ…';
 
+        // 今回の送信だけに使う照合番号。GASが結果通知に同じ番号を返す。
+        activeRequestToken = (window.crypto && crypto.randomUUID)
+          ? crypto.randomUUID()
+          : 'req-' + Date.now() + '-' + Math.random().toString(36).slice(2);
+
         const formData = new FormData(requestForm);
         const sendForm = document.createElement('form');
-
         sendForm.method = 'POST';
         sendForm.action = GAS_API_URL;
         sendForm.target = 'request-response-frame';
@@ -854,8 +862,12 @@
           sendForm.appendChild(input);
         }
 
-        // 重要：送信直後にはフォームを削除しない。
-        // 結果通知を受け取ったあとに削除する。
+        const tokenInput = document.createElement('input');
+        tokenInput.type = 'hidden';
+        tokenInput.name = 'requestToken';
+        tokenInput.value = activeRequestToken;
+        sendForm.appendChild(tokenInput);
+
         document.body.appendChild(sendForm);
         sendFormInProgress = sendForm;
 
@@ -864,6 +876,7 @@
         } catch (error) {
           requestInProgress = false;
           requestSubmit.disabled = false;
+          activeRequestToken = '';
           sendForm.remove();
           sendFormInProgress = null;
           requestStatus.textContent =
@@ -871,8 +884,7 @@
           return;
         }
 
-        // 通知が返ってこない場合に画面が永久に「送信中」にならないようにする。
-        // タイムアウト時は登録済みの可能性があるため、シートを確認するまで再送しない。
+        // 結果通知が届かない場合は、登録済みの可能性があるため再送を促さない。
         requestTimeoutId = setTimeout(function () {
           if (!requestInProgress) {
             return;
@@ -881,7 +893,7 @@
           requestInProgress = false;
           requestSubmit.disabled = true;
           requestStatus.textContent =
-            '送信結果を確認できなかったよ。重複を防ぐため、REQUESTSシートに追加されていないか確認してから、再送してね。';
+            '送信結果を確認できなかったよ。重複を防ぐため、REQUESTSシートを確認してね。確認できるまで再送しないでね。';
 
           if (sendFormInProgress) {
             sendFormInProgress.remove();
@@ -889,9 +901,9 @@
           }
 
           requestTimeoutId = null;
+          activeRequestToken = '';
         }, 20000);
       });
-
 
       loadSongs();
 
